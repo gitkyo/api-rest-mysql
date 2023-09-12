@@ -40,6 +40,16 @@ app.post("/tasks", async function (req, res) {
     addTasks(req, res)
 });
 
+//route to get tasks
+app.get("/tasks", async function (req, res) {
+    db.query("SELECT * FROM tasks", (error, result) => {
+        if (error) {
+            return res.status(500).json({ status: "ERROR", error });
+        }
+        return res.json({ status: "SUCCESS", result });
+    });
+});
+
 //lancement du serveur 
 app.listen(process.env.PORT, () => {
     console.log('Serveur lancé sur le port 3000')
