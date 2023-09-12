@@ -35,7 +35,7 @@ const addTasks = async (req, res) => {
 }
 
 
-//création d'une route post /tasks pour ajouter des taches
+//création d'une route post /tasks pour ajouter des taches.
 app.post("/tasks", async function (req, res) {
     addTasks(req, res)
 });
