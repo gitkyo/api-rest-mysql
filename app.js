@@ -1,54 +1,52 @@
-//load env variables
-import dotenv from 'dotenv';
-dotenv.config();
+
 
 //imprt d'express pour créer le serveur
 import express from 'express'
 
-
 //lancement de la DB
-import { DBConnection } from './db/database.js'
-const db = await DBConnection()
-
+import './db/database.js'
 
 //création du serveur web
 const app = express()
 
-//informe express que les données sont en json
-app.use(express.json())
+//informe express que les données sont envyer via un formulaire html
+app.use(express.urlencoded({ extended: true }))
+// app.use(express.json())
 
-//import du model des taches avec l'ORM sequilize - sauf si on veut jouer avec les requetes SQL 
+//informe express d'utiliser le routeur
+import { taskRouter } from './routers/task.js'
+app.use(taskRouter)
 
-//controller
-const addTasks = async (req, res) => {    
-    //on récupère les données du formulaire
-    let newTasks = { ...req.body };    
-      
-    //on ajoute les données dans la base de données
-    db.query("INSERT INTO tasks SET ?", newTasks, (error, result) => {
-    if (error) {
-        return res.status(500).json({ status: "ERROR", error });
-    }
-  
-    return res.json({ status: "SUCCESS" });
-    });
-}
+//Get the absolute path of views folder
+import path from 'path'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const viewsPath = path.join(__dirname, '/views/') 
+
+//set the view engine to pug
+app.set('view engine', 'pug')
+app.set('views', viewsPath)
 
 
-//création d'une route post /tasks pour ajouter des taches.
-app.post("/tasks", async function (req, res) {
-    addTasks(req, res)
-});
+//route of home page
+app.get('/', (req,res) => {
+    res.render("index", {title: "Task Manager"})
+})
 
-//route to get tasks
-app.get("/tasks", async function (req, res) {
-    db.query("SELECT * FROM tasks", (error, result) => {
-        if (error) {
-            return res.status(500).json({ status: "ERROR", error });
-        }
-        return res.json({ status: "SUCCESS", result });
-    });
-});
+// 404
+app.use((req, res, next) => {
+    res.status(404).send(
+        "<style>body{background: url(https://httpstatusdogs.com/img/404.jpg) no-repeat center center fixed #000000;}</style>")
+})
+
+
+/*
+* TODO : 
+* import du model des taches avec l'ORM Sequilize - sauf si on veut jouer avec les requetes SQL 
+* Install PostGre / Sequelize & test it
+*/
 
 //lancement du serveur 
 app.listen(process.env.PORT, () => {
