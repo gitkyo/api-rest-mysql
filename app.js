@@ -1,10 +1,13 @@
-
-
 //imprt d'express pour créer le serveur
 import express from 'express'
 
 //lancement de la DB
-import './db/database.js'
+import { sequelize } from './db/database.js'
+sequelize .authenticate().then(() => {
+    console.log('Connection has been established successfully.');
+}).catch((error) => {
+    console.error('Unable to connect to the database: ', error);
+});
 
 //création du serveur web
 const app = express()
@@ -45,6 +48,7 @@ app.use((req, res, next) => {
 /*
 * TODO : 
 * import du model des taches avec l'ORM Sequilize - sauf si on veut jouer avec les requetes SQL 
+* Add User model
 * Install PostGre / Sequelize & test it
 */
 
