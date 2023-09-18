@@ -1,5 +1,3 @@
-// import {db} from "../db/database.js";
-
 //import model
 import { Task } from "../models/tasks.js";
 
@@ -20,7 +18,8 @@ export const addTasks = async (req, res) => {
     //on ajoute les données dans la base de données avec ORM Sequelize
     try {
         await newTask.save();
-        return res.redirect("/tasks")
+        return res.json({ status: "SUCCESS", newTask });
+        // return res.redirect("/tasks")
     } catch (error) {
         return res.status(500).json({ status: "ERROR", error });
     }
@@ -42,7 +41,9 @@ export const getTasks = async (req, res) => {
     //get all tasks from database with ORM
     try {
         const tasks = await Task.findAll();
-        return res.render("tasks", {tasks: tasks})
+        // send to view with render method
+        // return res.render("tasks", {tasks: tasks})
+        return res.json({ status: "SUCCESS", tasks });
     }catch (error) {
         return res.status(500).json({ status: "ERROR", error });
     }

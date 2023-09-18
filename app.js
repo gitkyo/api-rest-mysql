@@ -13,12 +13,14 @@ sequelize .authenticate().then(() => {
 const app = express()
 
 //informe express que les données sont envyer via un formulaire html
-app.use(express.urlencoded({ extended: true }))
-// app.use(express.json()) 
+// app.use(express.urlencoded({ extended: true }))
+app.use(express.json()) 
 
 //informe express d'utiliser le routeur
 import { taskRouter } from './routers/task.js'
+import { userRouter } from './routers/user.js'
 app.use(taskRouter)
+app.use(userRouter)
 
 //Get the absolute path of views folder
 import path from 'path'
