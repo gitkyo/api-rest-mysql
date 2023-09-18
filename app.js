@@ -14,7 +14,7 @@ const app = express()
 
 //informe express que les données sont envyer via un formulaire html
 app.use(express.urlencoded({ extended: true }))
-// app.use(express.json())
+// app.use(express.json()) 
 
 //informe express d'utiliser le routeur
 import { taskRouter } from './routers/task.js'
