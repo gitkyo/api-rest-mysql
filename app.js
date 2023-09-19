@@ -12,9 +12,9 @@ sequelize .authenticate().then(() => {
 //création du serveur web
 const app = express()
 
-//informe express que les données sont envyer via un formulaire html
-// app.use(express.urlencoded({ extended: true }))
-app.use(express.json()) 
+
+// app.use(express.urlencoded({ extended: true })) //informe express que les données sont envyer via un formulaire html
+app.use(express.json())  // informe express que les données sont envoyer via un fichier json
 
 //informe express d'utiliser le routeur
 import { taskRouter } from './routers/task.js'
@@ -50,11 +50,10 @@ app.use((req, res, next) => {
 /*
 * TODO : 
 * import du model des taches avec l'ORM Sequilize - sauf si on veut jouer avec les requetes SQL 
-* Add User model
-* Install PostGre / Sequelize & test it
-*/
+* lier un user et une tâches avec Postgres
+*/ 
 
 //lancement du serveur 
 app.listen(process.env.PORT, () => {
-    console.log('Serveur lancé sur le port 3000')
+    console.log('Serveur lancé sur le port '+process.env.PORT)
 });

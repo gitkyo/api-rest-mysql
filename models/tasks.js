@@ -10,9 +10,20 @@ export const Task = sequelize.define("task", {
     completed: {
       type: DataTypes.BOOLEAN,
     },
-    }, {
-        // timestamps: false,
-        createdAt: false,
-        updatedAt: false        
-    }
-);
+    //add owner to task 
+    owner: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        ref: {
+            model: 'User',
+            key: 'id'
+        }
+      }
+      }, {
+          // timestamps: false,
+          createdAt: false, 
+          updatedAt: false        
+      }
+    
+    
+); 

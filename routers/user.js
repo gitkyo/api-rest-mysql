@@ -1,5 +1,5 @@
 //import controller
-import { addUsers, getUsers } from "../controllers/user.js";
+import { addUsers, getUsers, login } from "../controllers/user.js";
 
 //import express
 import express from "express";
@@ -17,4 +17,9 @@ userRouter.post("/users", async function (req, res) {
 //route to get tasks
 userRouter.get("/users", async function (req, res) {   
     getUsers(req, res)    
+});
+
+//route to login
+userRouter.post("/users/login", async function (req, res) {
+    login(req, res)
 });

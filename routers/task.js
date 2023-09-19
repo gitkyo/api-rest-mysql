@@ -1,5 +1,6 @@
 //import controller
-import { addTasks, getTasks } from "../controllers/task.js";
+import { addTasks, getMyTasks } from "../controllers/task.js";
+import { auth } from "../middleware/auth.js";
 
 //import express
 import express from "express";
@@ -14,8 +15,12 @@ taskRouter.post("/tasks", async function (req, res) {
     addTasks(req, res)
 });
 
-//route to get tasks
-taskRouter.get("/tasks", async function (req, res) {   
-    getTasks(req, res)    
+//route to get all tasks without connexion
+// taskRouter.get("/tasks", async function (req, res) {   
+//     getTasks(req, res)    
+// });
+
+taskRouter.get("/tasks", auth, async function (req, res) {
+    getMyTasks(req, res)
 });
 
