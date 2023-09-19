@@ -31,6 +31,7 @@ export const getUsers = async (req, res) => {
 //login user
 export const login = async (req, res) => {
     try {
+        console.log(req.body)
         //on cherche l'utilisateur dans la base de données
         const user = await User.findByCredentials(req.body.email, req.body.password);
         //on génère un token

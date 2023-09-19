@@ -12,6 +12,10 @@ sequelize .authenticate().then(() => {
 //création du serveur web
 const app = express()
 
+//add cors policy
+import cors from 'cors'
+app.use(cors()) 
+
 
 // app.use(express.urlencoded({ extended: true })) //informe express que les données sont envyer via un formulaire html
 app.use(express.json())  // informe express que les données sont envoyer via un fichier json
