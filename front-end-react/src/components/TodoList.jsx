@@ -11,13 +11,14 @@ function TodoList({ todoList }) {
     }, [todoList]);
 
     //fonction to load Todo on http://127.0.0.1:3000/tasks
-    const loadTodo = async () => {
-        const response = await fetch("http://127.0.0.1:3000/tasks")
-        const data = await response.json()
-        setTodos(data)
-    }
+    // const loadTodo = async () => {
+    //     const response = await fetch("http://127.0.0.1:3000/tasks")
+    //     const data = await response.json()
+    //     console.warn(data)
+    //     setTodos(data)
+    // }
 
-    loadTodo();
+    // loadTodo();
 
     return (
     <div>
