@@ -1,5 +1,6 @@
 //import controller
-import { addUsers, getUsers, login } from "../controllers/user.js";
+import { addUsers, getUsers, login, logout } from "../controllers/user.js";
+import { auth } from "../middleware/auth.js";
 
 //import express
 import express from "express";
@@ -22,4 +23,9 @@ userRouter.get("/users", async function (req, res) {
 //route to login
 userRouter.post("/users/login", async function (req, res) {
     login(req, res)
+});
+
+//route to logout
+userRouter.post("/users/logout", auth, async function (req, res) {
+    logout(req, res)
 });

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 
 //fonction header qui prend en paramètre la fonction setIsLoggedIn
@@ -7,23 +8,43 @@ function Header(  {username }) {
     const [isLoggedIn, setIsLoggedIn] = useState(true);
 
     useEffect(() => {    
-        //si isLoggedIn passe à false alors on supprime le cookie et fetch sur la route logout
+        
         if(!isLoggedIn){
-            const date = new Date();
-            date.setDate(date.getDate() - 7);
-            document.cookie = `token=; expires=${date.toUTCString()}; path=/`;
-            const response = fetch("http://127.0.0.1:3000/users/logout")
+            console.log("isLoggedIn")         
+        }
+        
+    }, []);
+
+    const setIsLoggedOut = async () => {
+        
+        setIsLoggedIn(false)        
+        
+        //get cookie named token  
+        const token = document.cookie.split('; ').find(row => row.startsWith('token')).split('=')[1];        
+        
+        //post request to logout with token in headers       
+        const response = await axios.post("http://127.0.0.1:3000/users/logout", {}, {
+            headers: {
+                "Authorization": `Bearer ${token}`,        
+            }
+        })
+            
+        //si code 200
+        if (response.status === 200) {
+            console.log("logout")
+
+            //remove cookie token
+            document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+
             //redirect to login page
             window.location.href = "/";
-        }
+        }   
+    }
 
-        
-      }, []);
- 
     return (
         <div>
         <h1>Bonjour {username}</h1>
-        <button type="button" onClick={() => setIsLoggedIn(false)}>Se déconnecter</button>
+        <button type="button" onClick={() => setIsLoggedOut(false)}>Se déconnecter</button>
         </div>
     )
 }

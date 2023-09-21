@@ -3,6 +3,15 @@ import TodoList from "./components/TodoList";
 import Header from "./components/Header";
 import axios from "axios";
 
+/* 
+TODO : *
+* Add button remove tasks
+* Add button edit tasks
+* Add headers to discard CSRF attacks
+* Add form subscribe
+* Add aouth connexion ..
+*/
+
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

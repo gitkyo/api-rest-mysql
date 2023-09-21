@@ -46,3 +46,22 @@ export const login = async (req, res) => {
         return res.status(401).send({ error: error.message });
     }
 }
+
+//logout
+export const logout = async (req, res) => {
+
+    try {        
+        //find user in database
+        const user = await User.findOne({ where: { id: req.user.id } });
+
+        //remove token
+        user.token = null;
+
+        //on sauvegarde l'utilisateur
+        await user.save();
+        //on renvoie un message
+        return res.status(200).send({ message: "User logged out" });
+    } catch (error) {
+        return res.status(500).send({ error: error.message });
+    }
+}
