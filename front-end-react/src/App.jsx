@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TodoList from "./components/TodoList";
+import Header from "./components/Header";
 import axios from "axios";
 
 function App() {
@@ -9,18 +10,9 @@ function App() {
   const [todoList, setTodoList] = useState([]);
   
 
-  useEffect(() => {
+  useEffect(() => {    
     // Récupération de la todolist à partir de la base de données
     // ...
-    // if (isLoggedIn) {
-      // Récupération de la todolist de l'utilisateur
-
-      // const response = await fetch("http://127.0.0.1:3000/tasks")
-      // const data = await response.json()
-      // console.warn(data)
-      // setTodoList(todoList);
-    // }
-
   }, []);
  
 
@@ -33,6 +25,9 @@ function App() {
       email: username,
       password: password
     }
+
+    //setUsername
+    setUsername(username);
     
     const response = await axios.post("http://127.0.0.1:3000/users/login", body)    
 
@@ -44,8 +39,7 @@ function App() {
       const date = new Date();
       date.setDate(date.getDate() + 7);
       document.cookie = `token=${response.data.token}; expires=${date.toUTCString()}; path=/`;
-      
-                 
+                       
       
       //set cookie in header of fetch to get TaskList of current user
       const response2 = await fetch("http://127.0.0.1:3000/tasks", {
@@ -53,28 +47,14 @@ function App() {
           "Authorization": `Bearer ${response.data.token}`
         }
       })      
-      // const response2 = await fetch("http://127.0.0.1:3000/tasks")
       const data = await response2.json()
-      console.warn(data)
-      //todo : adapter la data envoyé dans le setTodoList pour que ça marche
-      // setTodoList(data);
+      console.warn(data)      
+      setTodoList(data.tasks);
     }    
-
     
-    // Si l'authentification est réussie,
-    if (isLoggedIn) {
-      // // Récupération de la todolist de l'utilisateur
-      // const response = await fetch("http://127.0.0.1:3000/tasks")
-      // const data = await response.json()
-      // console.warn(data)
-      // setTodoList(todoList);
-    }
+    
   };
 
-  // setTodoList(todoList) = async () => {
-  //   // Récupération de la todolist de l'utilisateur
-  //   const response = await fetch("http://127.0.0.1:3000/tasks")
-  // }
   return (
     <div>
       {!isLoggedIn && (
@@ -99,7 +79,11 @@ function App() {
         </div>
       )}
       {isLoggedIn && (
+        <>
+        {/* add Header components with username and setIsLoggedIn */}
+        <Header username={username} />        
         <TodoList todoList={todoList} />
+        </>
       )}
     </div>
   );

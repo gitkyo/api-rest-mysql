@@ -2,36 +2,44 @@ import React, { useState, useEffect } from "react";
 
 function TodoList({ todoList }) {
   const [todos, setTodos] = useState([]);
-  
-  
-
+    
     useEffect(() => {
     // Mise à jour de la liste des tâches
     setTodos(todoList);
     }, [todoList]);
-
-    //fonction to load Todo on http://127.0.0.1:3000/tasks
-    // const loadTodo = async () => {
-    //     const response = await fetch("http://127.0.0.1:3000/tasks")
-    //     const data = await response.json()
-    //     console.warn(data)
-    //     setTodos(data)
-    // }
-
-    // loadTodo();
+    
+    const changeStatusTask = async (event) => {
+        console.log("edit status tasks")
+        // Empêcher le rechargement de la page
+        event.preventDefault();       
+        // prepare request to add email and password in body
+        const body = {
+          completed: event.target.checked
+        }
+      }
 
     return (
     <div>
       <h1>Liste des tâches</h1>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>
-            <input type="checkbox" checked={todo.completed} />
+          <li key={todo.id}>           
+
+            <input id={todo.id} type="checkbox" checked={todo.completed ? 1 : 0}   onChange={changeStatusTask} />
             &nbsp;
-            {todo.description}
+            <label htmlFor={todo.id}>{todo.description}</label>
+
           </li>
         ))}
       </ul>
+
+      <h2>Ajouter une tâche</h2>
+      <form>
+        <input type="text" />
+        <button type="submit">Ajouter</button>
+      </form>
+
+
     </div>
     );
 }
