@@ -5,16 +5,7 @@ import jwt from "jsonwebtoken";
 //controller
 export const addTasks = async (req, res) => {    
     //on récupère les données du formulaire
-    const newTask = new Task(req.body);
-
-    //get current ID user from token header sent by client
-    // le token est envoyé dans le header de la requete sous le champs Authorization. On isole le token avec la méthode replace
-    const token = req.header("Authorization").replace("Bearer ", "");
-    //on decode le token pour récupérer l'id de l'utilisateur avec la méthode verify
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded._id;    
-    //add id of current user to owner field
-    newTask.owner = userId
+  
           
     //on ajoute les données dans la base de données sans ORM
     // db.query("INSERT INTO tasks SET ?", newTasks, (error, result) => {
@@ -26,6 +17,17 @@ export const addTasks = async (req, res) => {
 
     //on ajoute les données dans la base de données avec ORM Sequelize
     try {
+        const newTask = new Task(req.body);
+
+        //get current ID user from token header sent by client
+        // le token est envoyé dans le header de la requete sous le champs Authorization. On isole le token avec la méthode replace
+        const token = req.header("Authorization").replace("Bearer ", "");
+        //on decode le token pour récupérer l'id de l'utilisateur avec la méthode verify
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded._id;    
+        //add id of current user to owner field
+        newTask.owner = userId
+        
         await newTask.save();
         return res.json({ status: "SUCCESS", newTask });
         // return res.redirect("/tasks")
