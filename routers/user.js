@@ -10,10 +10,10 @@ export const userRouter = express.Router();
 
 
 //création d'une route post /tasks pour ajouter des taches.
-userRouter.post("/users", async function (req, res) {
-    console.log(req.body)
-    addUsers(req, res)
-});
+// userRouter.post("/users", async function (req, res) {
+//     console.log(req.body)
+//     addUsers(req, res)
+// });
 
 //route to get tasks
 userRouter.get("/users", async function (req, res) {   
@@ -28,4 +28,9 @@ userRouter.post("/users/login", async function (req, res) {
 //route to logout
 userRouter.post("/users/logout", auth, async function (req, res) {
     logout(req, res)
+});
+
+//route to subscribe
+userRouter.post("/users/subscribe", async function (req, res) {
+    addUsers(req, res)
 });

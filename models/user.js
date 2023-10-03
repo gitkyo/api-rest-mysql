@@ -7,12 +7,13 @@ import bcrypt from "bcrypt";
 export const User = sequelize.define("user", {
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         trim: true
     },
     age: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        defaultValue: 1,
+        allowNull: true,
         validate: {
             isInt: {
                 args: true,

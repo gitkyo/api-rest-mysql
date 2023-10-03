@@ -8,8 +8,6 @@ TODO : *
 * Add button remove tasks
 * Add button edit tasks
 * Add headers to discard CSRF attacks
-* Add form subscribe
-* Add aouth connexion ..
 */
 
 function App() {
@@ -17,6 +15,9 @@ function App() {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [todoList, setTodoList] = useState([]);
+  const [wantToLoginIn, setWantToLoginIn] = useState(false);
+  const [wantToSubIn, setWantToSubIn] = useState(false);
+  const [messageLogin, setMessageLogin] = useState("");
   
 
   useEffect(() => {    
@@ -38,28 +39,41 @@ function App() {
     //setUsername
     setUsername(username);
     
-    const response = await axios.post("http://127.0.0.1:3000/users/login", body)    
-
-    //if status is ok then set isLoggedin to true
-    if (response.status === 200) {
-      setIsLoggedIn(true);
-
-      //set cookie for 7 days in frontend
-      const date = new Date();
-      date.setDate(date.getDate() + 7);
-      document.cookie = `token=${response.data.token}; expires=${date.toUTCString()}; path=/`;
-                       
+    if(wantToLoginIn) setWantToLoginIn(false)
+    if(wantToSubIn) setWantToSubIn(false)    
+    
+    let urlToLogOrSub = ""    
+    if (wantToLoginIn) urlToLogOrSub = "http://127.0.0.1:3000/users/login"
+    else if (wantToSubIn) urlToLogOrSub = "http://127.0.0.1:3000/users/subscribe"
       
-      //set cookie in header of fetch to get TaskList of current user
-      const response2 = await fetch("http://127.0.0.1:3000/tasks", {
-        headers: {
-          "Authorization": `Bearer ${response.data.token}`
-        }
-      })      
-      const data = await response2.json()
-      console.warn(data)      
-      setTodoList(data.tasks);
-    }    
+    try {
+      const response = await axios.post(urlToLogOrSub, body)  
+           
+      //if status is ok then set isLoggedin to true
+      if (response.status === 200 || response.status === 201) {
+        
+        //set isLoggedin to true
+        setIsLoggedIn(true);
+
+        //set cookie for 7 days in frontend
+        const date = new Date();
+        date.setDate(date.getDate() + 7);
+        document.cookie = `token=${response.data.token}; expires=${date.toUTCString()}; path=/`;
+                      
+        //set cookie in header of fetch to get TaskList of current user
+        const response2 = await fetch("http://127.0.0.1:3000/tasks", {
+          headers: {
+            "Authorization": `Bearer ${response.data.token}`
+          }
+        })      
+        const data = await response2.json()
+        console.warn(data)      
+        setTodoList(data.tasks);
+      }
+    } catch (error) {    
+      console.log(error)  
+      setMessageLogin(error.message)
+    }          
     
     
   };
@@ -69,7 +83,7 @@ function App() {
       {!isLoggedIn && (
         <div>
           <h1>Connexion</h1>        
-
+          <p>try with :<br/> pierre@pierre.com <br/> 123456789</p>
           <form onSubmit={handleLogin} method="post" >
             <input
               type="text"
@@ -83,8 +97,10 @@ function App() {
               placeholder="Mot de passe"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <button type="submit">Se connecter</button>
-          </form>
+            <button type="submit" onClick={setWantToLoginIn} >Se connecter</button>
+            <button type="submit" onClick={setWantToSubIn}>S'enregistrer</button>
+          </form>          
+          <p>{messageLogin}</p>
         </div>
       )}
       {isLoggedIn && (
