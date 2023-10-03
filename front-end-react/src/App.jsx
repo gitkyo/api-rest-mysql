@@ -8,6 +8,7 @@ TODO : *
 * Add button remove tasks
 * Add button edit tasks
 * Add headers to discard CSRF attacks
+* Add routeur to manage different pages
 */
 
 function App() {

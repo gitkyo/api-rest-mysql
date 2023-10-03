@@ -30,7 +30,6 @@ function TodoList({ todoList }) {
       const body = {
         description: description,
         completed: completed
-
       }
       
       try {
@@ -54,6 +53,11 @@ function TodoList({ todoList }) {
           
           //add todo in todolist and reload component     
           setTodos([...todos, body]);
+
+          //clean input form name description and completed
+          setDescription("");
+          setCompleted(false);
+          
 
         } 
 
@@ -84,13 +88,15 @@ function TodoList({ todoList }) {
         <input 
           type="text" 
           name="description" 
-          placeholder="Faire la vaiselle" 
+          placeholder="Faire la vaiselle"           
+          value={description}
           onChange={(event) => setDescription(event.target.value)}          
           required
         />
         <input 
           type="checkbox" 
-          name="completed"
+          name="completed"          
+          checked={completed}
           onChange={(event) => setCompleted(event.target.checked)} 
         />
         <button type="submit">Ajouter</button>
