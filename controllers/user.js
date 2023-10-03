@@ -8,6 +8,12 @@ export const addUsers = async (req, res) => {
     //on ajoute les données dans la base de données avec ORM Sequelize
     try {
 
+        //test si le user existe déjà
+        let user = await User.findOne({ where: { email: req.body.email } });
+        if (user) {
+            return res.status(400).send({ error: "User already exists" });
+        }
+
         await newUser.save();
         const token = await newUser.generateAuthToken();
         return res.status(201).send({ newUser, token });
